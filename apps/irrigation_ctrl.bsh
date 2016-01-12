@@ -1,0 +1,6 @@
+while [ 1 ]
+do
+   echo "executing irrigation control module  module"
+   /usr/bin/python irrigation_ctrl.py
+   sleep 5
+done

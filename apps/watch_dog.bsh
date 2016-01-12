@@ -1,0 +1,8 @@
+while [ 1 ]
+do
+   echo "executing watch dog control"
+   /usr/bin/python watch_dog.py 
+   sleep 10
+   
+
+done

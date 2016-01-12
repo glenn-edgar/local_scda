@@ -1,0 +1,2 @@
+#python external_control.py
+python ./external_control.py  2>&1 | tee /tmp/external_control.out

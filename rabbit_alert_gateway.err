@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "rabbit_alert_gateway.py", line 206, in <module>
+    channel.start_consuming()
+  File "build/bdist.linux-armv7l/egg/pika/adapters/blocking_connection.py", line 917, in start_consuming
+  File "build/bdist.linux-armv7l/egg/pika/adapters/blocking_connection.py", line 215, in process_data_events
+  File "build/bdist.linux-armv7l/egg/pika/adapters/blocking_connection.py", line 327, in _handle_read
+  File "build/bdist.linux-armv7l/egg/pika/adapters/blocking_connection.py", line 62, in ready
+KeyboardInterrupt

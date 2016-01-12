@@ -1,0 +1,58 @@
+{
+   "bits": [ "C201","C2","DS2" ],
+   "schedule": [
+       
+        [[ "satellite_1",  ["Y001"],15  ]],  
+        [[ "satellite_1",  ["Y106"],15  ]],   
+        [[ "satellite_1",  ["Y003"],15  ]],  
+        [[ "satellite_1",  ["Y004"],15  ]],   
+        [[ "satellite_1",  ["Y101"],15  ]], 
+
+        [[ "satellite_1",  ["Y102"],15  ]],   
+        [[ "satellite_1",  ["Y103"],15  ]],  
+        [[ "satellite_1",  ["Y104"],15  ]],   
+        [[ "satellite_1",  ["Y105"],15  ]],  
+        [[ "satellite_1",  ["Y002"],1   ]],  
+
+        [[ "satellite_1",  ["Y107"],15  ]],  
+        [[ "satellite_1",  ["Y108"],15  ]] ,  
+        [[ "satellite_1",  ["Y201"],12  ]],  
+        [[ "satellite_1",  ["Y202"],12  ]],   
+        [[ "satellite_1",  ["Y203"],12  ]],  
+
+        [[ "satellite_1",  ["Y204"],10  ]],   
+        [[ "satellite_1",  ["Y205"],10  ]],  
+        [[ "satellite_1",  ["Y206"],10  ]],   
+        [[ "satellite_1",  ["Y207"],15  ]],  
+        [[ "satellite_1",  ["Y208"],15  ]] , 
+ 
+        [[ "satellite_1",  ["Y301"],10  ]], 
+        [[ "satellite_1",  ["Y302"],10  ]],   
+        [[ "satellite_1",  ["Y303"],10  ]],  
+        [[ "satellite_1",  ["Y304"],10  ]],   
+        [[ "satellite_1",  ["Y305"],10  ]],
+  
+        [[ "satellite_1",  ["Y306"],10  ]],   
+        [[ "satellite_1",  ["Y307"],15  ]],  
+        [[ "satellite_1",  ["Y308"],15  ]] ,  
+        [[ "satellite_1",  ["Y401"],10  ]],  
+        [[ "satellite_1",  ["Y402"],12  ]], 
+  
+        [[ "satellite_1",  ["Y403"],10  ]],  
+        [[ "satellite_1",  ["Y404"],10  ]],   
+        [[ "satellite_1",  ["Y405"],9   ]],  
+        [[ "satellite_1",  ["Y406"],14  ]],   
+        [[ "satellite_1",  ["Y407"],9   ]],
+  
+        [[ "satellite_1",  ["Y408"],10  ]],  
+        [[ "satellite_1",  ["Y501"],10  ]],  
+        [[ "satellite_1",  ["Y502"],10  ]],   
+        [[ "satellite_1",  ["Y503"],10  ]],  
+        [[ "satellite_1",  ["Y504"],10  ]], 
+  
+        [[ "satellite_1",  ["Y601"],10  ]],  
+        [[ "satellite_1",  ["Y602"],12  ]],   
+        [[ "satellite_1",  ["Y603"],14  ]],  
+        [[ "satellite_1",  ["Y604"],10  ]]
+  ]
+}

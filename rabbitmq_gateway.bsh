@@ -1,0 +1,8 @@
+while [ 1 ]
+do
+   echo "executing rabbitmq gateway"
+   /usr/bin/python rabbitmq_gateway.py >  /tmp/rabbitmq gateway.err 
+   python cloud_event_queue.py "reboot" "rabbitmq_gateway"
+   mv /tmp/rabbitmq gateway.err /tmp/rabbitmq_gateway.errr
+   sleep 5
+done

@@ -1,0 +1,6 @@
+while [ 1 ]
+do
+   echo "executing rabbitmq gateway"
+   /usr/bin/python rabbitmq_gateway.py
+   sleep 5
+done
