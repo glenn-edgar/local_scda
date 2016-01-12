@@ -1,0 +1,27 @@
+#!/bin/bash
+sleep 5  # let redis start up
+python /home/pi/passwords.py
+python /home/pi/new_python/cloud_event_queue.py "reboot" "system_startup"
+#cd /home/pi/CherryPy-Working
+#sudo ./cherry_startup.bsh&
+#cd /home/pi/io_server
+#./io_server.bsh&
+
+#cd /home/pi/python
+
+#./irrigation_ctrl.bsh&
+
+cd /home/pi/new_python
+./python load_files.py
+
+./python_udp_server_startup.bsh&
+sleep 20 # let io server resolve 485 buses
+#./sprinkler_scheduling.bsh&
+./external_control.bsh&
+./irrigation_ctrl_startup.bsh&
+./rabbitmq_gateway.bsh&
+./rabbit_alert_gateway.bsh&
+./watch_dog.bsh&
+cd flask_web
+./flask_web.bsh&
+
