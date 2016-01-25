@@ -29,15 +29,32 @@ class Remote_Interface_server():
      self.cmds["REDIS_HSET"]                   = self.redis_hset
      self.cmds["REDIS_HGET_ALL"]               = self.redis_hget_all    
      self.cmds["REDIS_HDEL"]                   = self.redis_hdel
-     
+     self.cmds["REDIS_HKEYS"]                  = self.redis_hkeys
+     self.cmds["REDIS_KEYS"]                   = self.redis_keys
 
+
+
+   def redis_hkeys( self, command_data ):
+     
+       object_data = {}
+       object_data["results"] = []
+       for i in command_data:
+          object_data["results"].append( self.redis.hkeys(i["hash"]) )
+       return object_data
+ 
+
+   def redis_keys( self, command_data):
+       object_data = {}
+       object_data["results"] = []
+       for i in command_data:
+           object_data["results"].append( self.redis.keys(i["key"]))
+       return object_data
 
    def redis_get( self, command_data ):
 
         object_data = {}
         object_data["results"] = []
         for i in command_data:
-           data = {"key":i,"data":self.redis.get(i) }
            object_data["results"].append({"key":i, "data": self.redis.get(i) } )
         return object_data
 
@@ -81,7 +98,7 @@ class Remote_Interface_server():
        object_data = {}
        object_data["results"] = []
        for i in command_data:
-          print "i",i
+          #print "i",i
           key      = i["key"]
           start    = i["start"]
           end      = i["end"]
@@ -177,7 +194,7 @@ class Remote_Interface_server():
         object_data = {}
         object_data["results"] = []
         for i in command_data:
-           print i
+           #print i
            hash = i["hash"]
            key  = i["key"]
            data = i["data"]
@@ -203,8 +220,9 @@ class Remote_Interface_server():
               
 
    def process_commands( self, command_data ):
-       print "command ",command_data["command"]
+       #print "command ",command_data["command"]
        try:
+            
             if self.cmds.has_key( command_data["command"] ) == True:
                if command_data["command"] == "PING":
                   object_data = command_data
@@ -229,9 +247,9 @@ class Remote_Interface_server():
    def on_request(self, ch, method, props, body):
        try:
            input_data   = json.loads( base64.b64decode(body))
-           print "input_data",input_data
+           #print "input_data",input_data
            output_data  = self.process_commands( input_data )
-           print "output_data",output_data
+           #print "output_data",output_data
        except:
           print "exception"
           output_data = {}
