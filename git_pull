@@ -1,0 +1,3 @@
+git remote add origin  https://github.com/glenn-edgar/local_scda.git
+git remote -v
+git pull origin master
