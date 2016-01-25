@@ -19,8 +19,8 @@ sleep 20 # let io server resolve 485 buses
 #./sprinkler_scheduling.bsh&
 ./external_control.bsh&
 ./irrigation_ctrl_startup.bsh&
-./rabbitmq_gateway.bsh&
-./rabbit_alert_gateway.bsh&
+#./rabbitmq_gateway.bsh&
+#./rabbit_alert_gateway.bsh&
 ./watch_dog.bsh&
 cd flask_web
 ./flask_web.bsh&
