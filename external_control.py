@@ -327,8 +327,9 @@ class PI_Internal_Temperature():
       temp = temp.replace("temp=","").replace("'C\n","")
       temp = float(temp)
       temp = (9.0/5.0*temp)+32.
+      self.redis.hset("CONTROLLER_STATUS","temperature",temp)
       temp = json.dumps( { "description":"main controller","data":{ "tempF":temp} } )
-      self.redis.hset("EQUIPMENT_ENVIRON","CONTROLLER",temp)
+      
       print "pi temperature is ",temp
 
      
