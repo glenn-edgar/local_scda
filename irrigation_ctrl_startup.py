@@ -846,8 +846,10 @@ class Monitor():
       self.udp_servers            = udp_servers
 
    def log_clean_filter( self,*args):
+        self.redis.hset
         self.alarm_queue.store_past_action_queue("CLEAN_FILTER","GREEN"  )
-          
+        self.redis.hset("CONTROLLER_STATUS","clean_filter",time.time() )
+
    def set_suspend( self, *args):
       self.redis.hset("CONTROL_VARIABLES","SUSPEND","ON")
    
@@ -1011,7 +1013,7 @@ if __name__ == "__main__":
    redis_dict["GPIO_ADC"]     = "GPIO_ADC"
    redis_dict["COUNTER"]      = "COUNTER"
    redis.hset("CONTROL_VARIABLES","SUSPEND","OFF")
-   
+   redis.hincrby("CONTROLLER_STATUS", "irrigation_resets") 
    alarm_queue = io_control.alarm_queue.AlarmQueue( redis,"cloud_alarm_queue" )
    io_server  =  io_control.modbus_UDP_device.Modbus_Device_RTU(remote_devices , "127.0.0.1")
    plc_click   = io_control.click.PLC_Click( alarm_queue, io_server, redis, redis_dict )
@@ -1057,6 +1059,7 @@ if __name__ == "__main__":
 
    def check_off ( *args ):
         temp = float(redis.hget( "CONTROL_VARIABLES","global_flow_sensor_corrected" ))
+        redis.hset("CONTROLLER_STATUS", "check_off",temp )
         if temp   > 1.:
            redis.hset("ALARM","check_off",True)
            redis.hset("CONTROL_VARIABLES","SUSPEND","ON")
