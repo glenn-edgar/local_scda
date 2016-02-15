@@ -32,3 +32,4 @@ if __name__ == "__main__":
    #print "event",event,"process",process
    data = { "action":"reboot" ,"process":process}
    cloud_event_queue.store_event_queue( event,data )
+   redis.hincrby("CONTROLLER_STATUS", "system_resets")    
