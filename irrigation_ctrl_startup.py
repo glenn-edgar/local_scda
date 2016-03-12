@@ -1227,11 +1227,18 @@ if __name__ == "__main__":
                   parameters[3] = json_object[1]
            else:
                monitor.measure_current()
-               coil_current = float( redis.hget( "CONTROL_VARIABLES","coil_current" ))
-               print "coil current",coil_current
-               queue = "log_data:resistance_log:"+parameters[2]+":"+parameters[3]
-               redis.lpush(queue, coil_current )
-               redis.ltrim(queue,0,10)
+               try:
+                  coil_current = float( redis.hget( "CONTROL_VARIABLES","coil_current" ))
+                  print "coil current",coil_current
+                  queue = "log_data:resistance_log:"+parameters[2]+":"+parameters[3]
+                  redis.lpush(queue, coil_current )  # necessary for web server
+                  redis.ltrim(queue,0,10)
+                  queue = "log_data:resistance_log_cloud:"+parameters[2]+":"+parameters[3]
+                  redis.lpush(queue, json.dumps( { "current": coil_current, "time":time.time()} ))  #necessary for cloud
+                  redis.ltrim(queue,0,10)
+
+               except:
+                   raise #should not happen
                irrigation_io_control.disable_all_sprinklers()
                parameters[1] = 0
  
@@ -1383,7 +1390,7 @@ if __name__ == "__main__":
    cf.insert_link("link_6",    "Disable_Chain",        [["manual_master_valve_off_chain"]] )
 
 
-   cf.define_chain("gpm_triggering_clean_filter",True) #TBD
+   cf.define_chain("gpm_triggering_clean_filter",True) #TBDf
 
    cf.insert_link( "link_1",  "WaitEvent",      [ "MINUTE_TICK" ] )
    #cf.insert_link( "link_1",  "Log",            ["check to clean filter"] )

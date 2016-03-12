@@ -52,6 +52,7 @@ class Watch_Dog_Client():
 
 
 
+### add event wd_pid_change event -----
 
 class Watch_Dog_Ctrl():
    def __init__(self, redis ):
