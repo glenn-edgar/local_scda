@@ -3,23 +3,50 @@ import redis
 import json
 
 
-class ModbusRedisServer():
-   def __init__(self, message_handler ):
-       self.redis            = redis.StrictRedis( host = "127.0.0.1", port=6379, db = 0 )
+#
+#
+# TBD:  Need to look at this module again
+#
+#
+#
+#
+#
+
+
+
+class ModbusRedisServer():  # manages the local functions of io server
+   def __init__(self, message_handler, redis_db = 0 ):
+       self.redis            = redis.StrictRedis( host = "127.0.0.1", port=6379, db = redis_db )
        self.message_handler = message_handler
-       self.actions              = {}
-       self.actions["counter"]   = self.counter_functions
-       self.actions["ping"]      = self.ping_functions
+       self.commands              = {}
+       self.commands[255]         = self.set_redis_registers 
+       self.commands[254]         = self.read_redis_registers
+       self.commands[253]         = self.ping_functions
+       self.commands[252]         = self.counter_functions
+       self.ping_functions_dict   = {"ping_device": self.ping_device_a,"ping_all_devices":   self.ping_all_devices_a }
+       self.counter_functions     = {"clear_all_counters": self.clear_all_counters, "get_all_counters": self.get_all_counters, "clear_counter_list": self.clear_counter_list }
 
+   def set_redis_registers( self, json_object ):
+       keys = json_object.keys()
+       for i in keys:
+           self.redis.set( i, json_object[i] )
+       return None
 
-   def counter_functions( self, parameters ):
-      sub_action       = parameters["sub_action"]
-      sub_parameter    = parameters["sub_parameter"]
-      register_actions = {"clear_all_counters": self.clear_all_counters,
-                          "get_all_counters": self.get_all_counters,
-                          "clear_counter_list": self.clear_counter_list }
-      return register_actions[ sub_action ](sub_parameter)
-		    
+   def read_redis_registers( self, json_object ):
+      return_dict = {}
+      for i in json_object:
+          return_dict[i] = self.redis.get(i)
+      return return_dict
+
+   def counter_functions( self, json_object ):
+
+      temp             = json_object["parameters"]
+      action           = temp["sub_action"]
+      parameters       = temp["sub_parameter"]
+      if self.counter_functions.has_key(action):
+          return self.counter_functions[ action ](parameters)
+      else:
+          return None
                           
    def clear_counter_list( self , parameters ):
        for i in parameters:
@@ -34,15 +61,13 @@ class ModbusRedisServer():
         self.message_handler.clear_all_counters()
         return None
 
-   def ping_functions( self, parameters ):
-      
-      sub_action    = parameters["sub_action"]
-      sub_parameters = parameters["sub_parameter"]
-      print "ping functions",sub_action,sub_parameters
-      register_actions = {"ping_device":        self.ping_device_a,
-                          "ping_all_devices":   self.ping_all_devices_a }
-
-      return register_actions[ sub_action ](sub_parameters)    
+   def ping_functions( self, json_object ):
+     
+      temp             = json_object["parameters"]
+      action           = temp["sub_action"]
+      parameters       = temp["sub_parameter"]
+      return self.ping_functions_dict[action](parameters)
+        
 
               
    def ping_device_a( self, parameters  ):
@@ -53,52 +78,35 @@ class ModbusRedisServer():
         return self.message_handler.ping_all_devices()
       
 
-   def process_msg( self, address, msg, counter  ):
+   #handles local functions to UDP IO SERVER
+   def process_msg( self, 
+                    address,   # not used
+                    msg, 
+                    counter   ):  
        
        #try:
            
+           # message length = msg[0]
            function_code  = ord(msg[1])
            json_string    = msg[2:-2]
-           
-           
-	   msg_list = []
-	   msg_list.append(msg[0:2])
+           return_list = []
+           return_list.append(msg[0:2])
            json_object = json.loads(json_string)
-           
            result = json.dumps(None)
-	   if function_code == 254:
-              temp_dict = {}
-              keys = json_object
+
+           if self.commands.has_key( int(function_code)):
+              result = json.dumps( self.commands[function_code](json_object ) )
            else:
-              keys = json_object.keys()
-           for i in keys:
-               if function_code == 255:
-                   self.redis.set( i, json_object[i] )
-               if function_code == 254:
-		   temp_dict[i] = self.redis.get(i)
-           if function_code == 254:
-                result = json.dumps(temp_dict)
-                
-	   
-           if function_code == 253:
-               action     = json_object["action"]
-               parameters = json_object["parameters"]
-              
-               if self.actions.has_key( action ):
-                   result = json.dumps( self.actions[action](parameters) ) 
-                   print "result",result
-               
+              result = json.dumps(None)
+           return_list.append(result)
 
-           msg_list.append(result)
-
-	   master_string = "".join(msg_list)
-	   
-	   master_string = master_string +self._calculateCrcString(master_string)
-           return master_string
+           return_string = "".join(return_list)
+    
+           return_string = return_string +self._calculateCrcString(return_string)
+           return return_string
            
-       #except:
-        #   pass
-          
+             
+
 
    def _calculateCrcString(self,inputstring):
        """Calculate CRC-16 for Modbus.
@@ -137,23 +145,23 @@ class ModbusRedisServer():
 
 if __name__ == "__main__":          
 
-   server = ModbusRedisServer(None)
+   server = ModbusRedisServer(None, 2) 
    msg_list = []
-   msg_list.append([chr(23),chr(255)])
+   msg_list.append([chr(23),chr(255)]) # dummy message length
    msg_list.append( json.dumps({ "test_1":21,"test_2":22 }))
    msg_string = "".join(msg_list[0])
-   msg_string = msg_string + msg_list[1] +"dc"
+   msg_string = msg_string + msg_list[1] +"dc" #dummy dc crc
 
-   return_string = server.process_msg(msg_string)
+   return_string = server.process_msg(0,msg_string,0)
    print "return string",return_string
    msg_list = []
-   msg_list.append([chr(23),chr(254)])
+   msg_list.append([chr(23),chr(254)]) # dummy message length
    msg_list[0] = "".join(msg_list[0])
-   msg_list.append( json.dumps( [ "test_1","test_2" ]))
+   msg_list.append( json.dumps( [ "test_1","test_2" ])) # dummy dc crc
    msg_list.append("dc")
    msg_string = "".join(msg_list)
 
-   return_string = server.process_msg(msg_string)
+   return_string = server.process_msg(0,msg_string,0)
    print "return string",return_string[2:-2]
 
    

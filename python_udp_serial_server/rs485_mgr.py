@@ -39,20 +39,23 @@ class RS485_Mgr():
        pass 
 
    def process_message( self, parameters, message, counters = None ):
-       print "made it to rs485"
+       #print "made it to rs485"
        for i in range(0,10):
+           #print i
            try:
 
                response = ""
+               #print "message ",message
                response =  self.instrument._communicate( message, 1024)
-               print "message",[message],len(response),[response]
+               #print "response ",response
+               #print "message",[message],len(response),[response]
                if len(response  ) > 4:
                    receivedChecksum          = response[-2:]
                    responseWithoutChecksum   = response[0 : len(response) - 2]
                    calculatedChecksum = self._calculateCrcString(responseWithoutChecksum)
-                   print "crc",[receivedChecksum, calculatedChecksum], ord(message[0]),parameters["address"]
+                   #print "crc",[receivedChecksum, calculatedChecksum], ord(message[0]),parameters["address"]
                    if (receivedChecksum == calculatedChecksum) and (ord(message[0]) == parameters["address"] ): # check checksum
-                       print "made it here",counters
+                       #print "made it here",counters
                        if counters != None:
                            counters["counts"] = counters["counts"] +1
                        return response
@@ -75,7 +78,8 @@ class RS485_Mgr():
    def probe_register( self, parameters ):
        address     = parameters["address"]
        register    = parameters["search_register"]
-       payload     = struct.pack("<BBBBBB",address,3,(register>>8)&255,register&255,0,1)  # read register 0 1 length
+       number      = parameters["register_number"]
+       payload     = struct.pack("<BBBBBB",address,3,(register>>8)&255,register&255,0,number)  # read register 0 1 length
        calculatedChecksum = self._calculateCrcString(payload)
        payload = payload+calculatedChecksum
        response = self.process_message(parameters,payload )
@@ -117,14 +121,15 @@ class RS485_Mgr():
 if __name__ == "__main__":
    rs485_mgr = RS485_Mgr()
    interface_parameters = {}
-   interface_parameters["interface"]              = "/dev/ttyUSB0"
+   interface_parameters["interface"]   = "COM9"
    interface_parameters["baud_rate"]   = 38400
    interface_parameters["timeout"]     = .15
    parameters = {}
    parameters["address"] = 31
-   parameters["search_register"] = 0
+   parameters["search_register"] = 1
+   parameters["register_number"] =  10
    if rs485_mgr.open(interface_parameters ):
-     print rs485_mgr.probe_register( parameters )
+     #print rs485_mgr.probe_register( parameters )
      rs485_mgr.close()
       
 

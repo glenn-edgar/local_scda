@@ -1,5 +1,9 @@
 
-
+#
+#  The module link the pysical address to the interface.
+#  The interface stores the device hander in the dict object
+#  and the error counters in the counter object
+#
 
 
 class MessageManager():
@@ -32,8 +36,13 @@ class MessageManager():
    
    def process_msg( self, msg ): 
        #try:
-         address = ord(msg[0])      
+         #print "made it here", list(msg)
+         address = ord(msg[0])
+         #print "address",address
+         
+         
          if self.dict.has_key(address) :
+             
              response = self.dict[ address].process_msg( address, msg, self.counters[address] )
              if len(response) == 0 :
                 return ""
@@ -42,23 +51,28 @@ class MessageManager():
         #   return ""
           
    def ping_devices( self,address):
-       print "ping devices"
+  
        return_value = []
-       for address in address:      
-          if self.dict.has_key(address) :
-           return_value.append({ "address":address,  "result":self.dict[ address].ping_device( address ) } )
+       #print "address list",address
+       for  i in address:     
+          #print "address",i           
+          if self.dict.has_key(i) :
+            return_value.append({ "address":i,  "result":self.dict[ i].ping_device( i ) } )
+          else:
+             return_value.append({ "address":i,  "result":False } )
        return return_value
      
    def ping_all_devices( self ):
-       print "ping all devices"
+       #print "ping all devices"
        result = []
+
        for address in self.dict.keys():
           if hasattr(self.dict[address], 'ping_device'):
                temp = {}
                temp["address"] = address
                temp["result"]  = self.dict[address].ping_device( address )
                result.append( temp )
-       print "result",result
+      #print "result",result
        return result
 
 
