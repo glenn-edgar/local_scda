@@ -71,27 +71,27 @@ class ModbusUDPClient():
    def ping_device( self, modbus_address, address_list ):
         self.instrument.address = modbus_address
         json_data = {"action":"ping"   ,"parameters":{ "sub_action":"ping_device"   , "sub_parameter":address_list   } }
-        return self.instrument.redis_communicate( modbus_address,253, json_data)
+        return self.instrument.redis_communicate( 253, json_data)
 
-   def ping_all_devices( self, modbus_address ):
+   def ping_all_devices( self, modbus_address = None ):
         self.instrument.address = modbus_address
         json_data = {"action":"ping"  ,"parameters":{ "sub_action":"ping_all_devices"    , "sub_parameter": None  } }
-        return self.instrument.redis_communicate( modbus_address,253, json_data)
+        return self.instrument.redis_communicate( 253, json_data)
 
-   def clear_all_counters( self , modbus_address):
+   def clear_all_counters( self , modbus_address= None):
         self.instrument.address = modbus_address
         json_data = {"action":"counter"   ,"parameters":{ "sub_action":"clear_all_counters"   , "sub_parameter":None   } }
-        return self.instrument.redis_communicate( modbus_address,253, json_data)
+        return self.instrument.redis_communicate( 253, json_data)
 
-   def get_all_counters( self, modbus_address ):
+   def get_all_counters( self, modbus_address=None ):
         self.instrument.address = modbus_address
         json_data = {"action":"counter"   ,"parameters":{ "sub_action": "get_all_counters" , "sub_parameter":None   } }
-        return self.instrument.redis_communicate( modbus_address,253, json_data)
+        return self.instrument.redis_communicate( 253, json_data)
 
    def clear_counter_list( self, modbus_address, address_list ):
         self.instrument.address = modbus_address
         json_data = {"action":"counter"   ,"parameters":{ "sub_action":"clear_counter_list"   , "sub_parameter":address_list   } }
-        return self.instrument.redis_communicate( modbus_address,253, json_data)
+        return self.instrument.redis_communicate( 253, json_data)
 
 
 
