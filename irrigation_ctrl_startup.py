@@ -997,6 +997,7 @@ if __name__ == "__main__":
    import io_control.click
    import io_control.basic_io_control
    import io_control.irrigation_ctl
+   import io_control.new_instrument
    import watch_dog   
 
    
@@ -1015,7 +1016,7 @@ if __name__ == "__main__":
    redis.hset("CONTROL_VARIABLES","SUSPEND","OFF")
    redis.hincrby("CONTROLLER_STATUS", "irrigation_resets") 
    alarm_queue = io_control.alarm_queue.AlarmQueue( redis,"cloud_alarm_queue" )
-   io_server  =  io_control.modbus_UDP_device.Modbus_Device_RTU(remote_devices , "127.0.0.1")
+   io_server  =  io_control.modbus_UDP_device.ModbusUDPDeviceClient(remote_devices , "127.0.0.1")
    plc_click   = io_control.click.PLC_Click( alarm_queue, io_server, redis, redis_dict )
 
    modbus_control = io_control.modbus_UDP_device.ModbusUDPDeviceClient( [], "127.0.0.1")
