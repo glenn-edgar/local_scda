@@ -14,10 +14,10 @@ server_1_serial_interfaces = {}
 server_1_serial_interfaces[ "rtu_2" ] = { "type":"rs485_modbus", "interface_parameters":{ "interface":None, "timeout":.15, "baud_rate":38400 } ,"search_device":"main_controller" } 
 
 server_1_remote_devices = {}
-#server_1_remote_devices["current_monitor"] = { "interface": "rtu_1", "parameters":{ "address":31 , "search_register":0} }
-server_1_remote_devices["main_controller"] = { "interface": "rtu_2", "parameters":{ "address":100 , "search_register":0} }
-server_1_remote_devices["remote_1"]        = { "interface": "rtu_2", "parameters":{ "address":125 , "search_register":0} }
-server_1_remote_devices["remote_2"]        = { "interface": "rtu_2", "parameters":{ "address":170 , "search_register":0} }
+#server_1_remote_devices["current_monitor"] = { "interface": "rtu_1", "parameters":{ "address":31 , "search_register":1,"register_number":10 }  }
+server_1_remote_devices["main_controller"] = { "interface": "rtu_2", "parameters":{ "address":100 , "search_register":0, "register_number":1 } }
+server_1_remote_devices["remote_1"]        = { "interface": "rtu_2", "parameters":{ "address":125 , "search_register":0 ,"register_number":1  } }
+server_1_remote_devices["remote_2"]        = { "interface": "rtu_2", "parameters":{ "address":170 , "search_register":0, "register_number":1 } }
 
 remote_devices = {}
 remote_devices["satellite_1"] = {"remote":  "satellite_1", "UDP":"127.0.0.1", "address":100 , "type":"CLICK" ,
