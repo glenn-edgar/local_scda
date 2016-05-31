@@ -2,7 +2,7 @@ import socket
 import time
 
 class UDP_Server():
-   def __init__(self, address="",port=5006,time_out=1.0 ):
+   def __init__(self, address="",port=5005,time_out=1.0 ):
        self.address   = address
        self.port      = port
        self.time_out  = time_out
