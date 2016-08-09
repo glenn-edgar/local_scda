@@ -109,8 +109,8 @@ class ETO():
            cimis_eto         = CIMIS_ETO( self.access_codes )
            cimis_results     = cimis_eto.get_eto(time = time.time()-24*3600)
            
-           eto["cimis"]      = cimis_results["eto"]
-           rain["cimis"]     = cimis_results["rain"]
+           #eto["cimis"]      = cimis_results["eto"]
+           #rain["cimis"]     = cimis_results["rain"]
        except:
           print "exception cimis"
 
