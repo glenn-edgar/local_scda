@@ -31,7 +31,7 @@ class Remote_Interface_Client():
      temp["cmd"]         = "CLEAN_FILTER"
      return json.dumps(temp)
 
-  def open_master_valve( self ):
+  def open_main_valve( self ):
      temp = {}
      temp["cmd"]         = "OPEN_MASTER_VALVE"
      return json.dumps(temp)
@@ -99,7 +99,7 @@ class Remote_Interface_server():
      self.cmds["RESTART_PROGRAM"]             = self.restart_program
      self.cmds["REBOOT_SYSTEM"]               = self.reboot_system
      self.cmds["CLEAN_FILTER"]                = self.clean_filter
-     self.cmds["OPEN_MASTER_VALVE"]           = self.open_master_valve
+     self.cmds["OPEN_MASTER_VALVE"]           = self.open_main_valve
      self.cmds["CLOSE_VALVE"]                 = self.close_valve
      self.cmds["AUTO_MODE"]                   = self.set_auto_mode
      self.cmds["QUEUE_SCHEDULE"]              = self.queue_schedule
@@ -159,7 +159,7 @@ class Remote_Interface_server():
   def clean_filter( self, object_data ):
      pass
 
-  def open_master_valve( self, object_data ):
+  def open_main_valve( self, object_data ):
      pass
 
 
