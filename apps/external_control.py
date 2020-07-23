@@ -146,9 +146,9 @@ if __name__ == "__main__":
 #  
 # ETO processing elements  
 # 
-#  cf.define_chain( "master_sequencer", True )    ## auto start thread 
+#  cf.define_chain( "main_sequencer", True )    ## auto start thread 
 #  cf.insert_link( "link_3", "Enable_Chain",[["new_day_house_keeping","get_current_eto","delete_cimis_email_data" ]])
-#  cf.insert_link( "link_4","Disable_Chain",[["master_sequencer"]]) 
+#  cf.insert_link( "link_4","Disable_Chain",[["main_sequencer"]]) 
 
   cf.define_chain("get_current_eto",True)
   cf.insert_link( "link_1", "WaitTod", ["*",12, "*","*" ] )
